@@ -1,0 +1,10 @@
+{
+  "name": "mood-plotter",
+  "version": "1.0.0",
+  "main": "index.html",
+  "repository": "git@github.com:lheilmann/mood-plotter.git",
+  "license": "MIT",
+  "dependencies": {
+    "lodash": "^4.17.21"
+  }
+}
