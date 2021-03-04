@@ -1,10 +1,13 @@
 const canvasWidth = 360;
 const canvasHeight = canvasWidth;
 
-const origin = {
-  x: canvasWidth / 2,
-  y: canvasHeight / 2,
-};
+const originX = canvasWidth / 2;
+const originY = canvasHeight / 2;
+
+const radiusOuter = 150;
+const diameterOuter = 2 * radiusOuter;
+
+const radiusInner = 10;
 
 function setup() {
   canvas = createCanvas(canvasWidth, canvasHeight);
@@ -13,52 +16,45 @@ function setup() {
   stroke(0);
   strokeWeight(2);
 
-  radiusOuter = 150;
-  diameterOuter = 2 * radiusOuter;
-
-  radiusInner = 30;
-
-  centerX = canvasWidth / 2;
-  centerY = canvasHeight / 2;
+  innerCenterX = canvasWidth / 2;
+  innerCenterY = canvasHeight / 2;
 }
 
 function draw() {
   background(255);
 
   // Draw outer wheel
-  ellipse(origin.x, origin.y, diameterOuter, diameterOuter);
+  ellipse(originX, originY, diameterOuter, diameterOuter);
 
-  distance = dist(mouseX, mouseY, centerX, centerY);
+  distance = dist(mouseX, mouseY, innerCenterX, innerCenterY);
 
   if (distance < radiusInner) {
-    overPointer = true;
+    overMarker = true;
   } else {
-    overPointer = false;
+    overMarker = false;
   }
 
-  // Draw the circle
-  ellipse(centerX, centerY, 20, 20);
+  // Draw inner marker
+  ellipse(innerCenterX, innerCenterY, 2 * radiusInner, 2 * radiusInner);
 }
 
 function mousePressed() {
-  xOffset = mouseX - centerX;
-  yOffset = mouseY - centerY;
+  xOffset = mouseX - innerCenterX;
+  yOffset = mouseY - innerCenterY;
 }
 
 function mouseDragged() {
-  if (overPointer) {
-    centerX = mouseX - xOffset;
-    centerY = mouseY - yOffset;
+  if (overMarker) {
+    innerCenterX = mouseX - xOffset;
+    innerCenterY = mouseY - yOffset;
   }
 }
-
-// function mouseReleased() {
-//   locked = false;
-// }
 
 // ----------
 // Draw
 // ----------
+
+function drawLabels() {}
 
 // ----------
 // Utils
