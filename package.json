@@ -5,6 +5,7 @@
   "repository": "git@github.com:lheilmann/mood-plotter.git",
   "license": "MIT",
   "dependencies": {
-    "lodash": "^4.17.21"
+    "lodash": "^4.17.21",
+    "prettier": "^2.2.1"
   }
 }
