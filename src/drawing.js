@@ -1,13 +1,10 @@
-// const canvasWidth = 300;
-// const canvasHeight = canvasWidth;
-
-// Interval: [-50, 50]
-const valence = 23;
-const arousal = -12;
+// Sannity checks
+console.log("Valence:", valence);
+console.log("Arousal:", arousal);
 
 function setup() {
   canvas = createCanvas(canvasWidth, canvasHeight);
-  canvas.parent("output");
+  canvas.parent("sketch");
 
   noFill();
 

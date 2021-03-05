@@ -1,6 +1,3 @@
-const canvasWidth = 360;
-const canvasHeight = canvasWidth;
-
 const originX = canvasWidth / 2;
 const originY = canvasHeight / 2;
 
@@ -11,7 +8,7 @@ const radiusInner = 10;
 
 function setup() {
   canvas = createCanvas(canvasWidth, canvasHeight);
-  canvas.parent("input");
+  canvas.parent("sketch");
 
   stroke(0);
   strokeWeight(2);
@@ -47,6 +44,15 @@ function mouseDragged() {
   if (overMarker) {
     innerCenterX = mouseX - xOffset;
     innerCenterY = mouseY - yOffset;
+
+    // Compute valence and arousal to fit in [-50, 50] interval and
+    // update values accordingly
+    // TODO: Take diamter instead of canvasWidth
+    valence = int((innerCenterX / canvasWidth) * 100 - 50);
+    arousal = int(-((innerCenterY / canvasWidth) * 100 - 50));
+
+    console.log("Valence:", valence);
+    console.log("Arousal:", arousal);
   }
 }
 
