@@ -20,6 +20,12 @@ body {
   margin-bottom: 12px;
 }
 
+h1 {
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
 .sketch {
   border: 5px dashed #000000;
 }

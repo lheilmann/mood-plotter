@@ -10,7 +10,7 @@ const diameterWheel = 2 * radiusWheel;
 const wheelMarginX = (canvasWidth - diameterWheel) / 2;
 const wheelMarginY = (canvasHeight - diameterWheel) / 2;
 
-const radiusMarker = 10;
+const radiusMarker = 15;
 const diameterMarker = 2 * radiusMarker;
 
 let overBox = false;
