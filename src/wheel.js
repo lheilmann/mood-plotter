@@ -1,4 +1,4 @@
-const canvasWidth = 320;
+const canvasWidth = 360;
 const canvasHeight = canvasWidth;
 
 const originX = canvasWidth / 2;
@@ -6,6 +6,9 @@ const originY = canvasHeight / 2;
 
 const radiusOuter = 150;
 const diameterOuter = 2 * radiusOuter;
+
+const outerMarginX = (canvasWidth - diameterOuter) / 2;
+const outerMarginY = (canvasHeight - diameterOuter) / 2;
 
 const radiusInner = 10;
 const diameterInner = 2 * radiusInner;
@@ -17,15 +20,19 @@ function setup() {
   stroke(0);
   strokeWeight(2);
 
-  innerCenterX = originX + valence;
-  innerCenterY = originY - arousal;
+  innerCenterX = originX;
+  innerCenterY = originY;
 }
 
 function draw() {
+  // Draw on "clean" white canvas
   background(255);
 
-  // Draw outer wheel
+  // Draw outer wheel (static)
   ellipse(originX, originY, diameterOuter, diameterOuter);
+
+  // Draw inner marker (dynamic)
+  ellipse(innerCenterX, innerCenterY, diameterInner, diameterInner);
 
   // Distance from mouse to center of inner marker
   distance = dist(mouseX, mouseY, innerCenterX, innerCenterY);
@@ -35,9 +42,6 @@ function draw() {
   } else {
     overMarker = false;
   }
-
-  // Draw inner marker
-  ellipse(innerCenterX, innerCenterY, diameterInner, diameterInner);
 }
 
 function mousePressed() {
@@ -47,21 +51,24 @@ function mousePressed() {
 
 function mouseDragged() {
   if (overMarker) {
-    innerCenterX = mouseX - xOffset;
-    innerCenterY = mouseY - yOffset;
+    const newCenterX = mouseX - xOffset;
+    const newCenterY = mouseY - yOffset;
 
-    // Compute valence and arousal to fit in [-50, 50] interval and
-    // update values accordingly
-    // TODO: Take diamter instead of canvasWidth
-    valence = int((innerCenterX / canvasWidth) * 100 - 50);
-    arousal = int(-((innerCenterY / canvasWidth) * 100 - 50));
+    if (isPointOnCircle(newCenterX, newCenterY)) {
+      innerCenterX = newCenterX;
+      innerCenterY = newCenterY;
 
-    console.log("Valence:", valence);
-    console.log("Arousal:", arousal);
-
-    // Prevent default
-    return false;
+      // Compute valence and arousal to fit in [-50, 50] interval and
+      // update values accordingly
+      valence = int(((innerCenterX - outerMarginX) / diameterOuter) * 100 - 50);
+      arousal = int(
+        -(((innerCenterY - outerMarginY) / diameterOuter) * 100 - 50)
+      );
+    }
   }
+
+  // Prevent default
+  return false;
 }
 
 // ----------
@@ -74,4 +81,9 @@ function drawLabels() {}
 // Utils
 // ----------
 
-function getPointOnCircle(origin, angle) {}
+function isPointOnCircle(pointX, pointY) {
+  return (
+    Math.pow(pointX - originX, 2) + Math.pow(pointY - originY, 2) <
+    Math.pow(radiusOuter, 2)
+  );
+}
