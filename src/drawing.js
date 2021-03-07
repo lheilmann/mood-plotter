@@ -123,15 +123,6 @@ function chooseShapeType() {
 // Helpers
 // ----------
 
-function drawRandomVertex() {
-  p1 = getRandomPoint();
-  p2 = getRandomPoint();
-  p3 = getRandomPoint();
-  p4 = getRandomPoint();
-
-  return bezierVertex(p1.x, p1.y, p2.x, p2.y, p3.x, p3.y, p4.x, p4.y);
-}
-
 function drawRandomCurve() {
   noFill();
 
