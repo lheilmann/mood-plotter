@@ -1,8 +1,4 @@
-// Sanity checks
-console.log("Valence:", valence);
-console.log("Arousal:", arousal);
-
-const canvasWidth = 320;
+const canvasWidth = 360;
 const canvasHeight = canvasWidth;
 
 function setup() {
@@ -81,7 +77,6 @@ function drawGridPattern(valence, arousal) {
   drawingContext.shadowColor = color(themeColors.secondary);
 
   let grid = get2DGrid();
-  console.log(grid);
   grid.map((column) =>
     column.map((point) =>
       triangle(point.x, point.y, point.x + 4, point.y, point.x + 2, point.y + 2)
