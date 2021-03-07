@@ -1,15 +1,19 @@
-// Sannity checks
+// Sanity checks
 console.log("Valence:", valence);
 console.log("Arousal:", arousal);
+
+const canvasWidth = 320;
+const canvasHeight = canvasWidth;
 
 function setup() {
   canvas = createCanvas(canvasWidth, canvasHeight);
   canvas.parent("sketch");
 
+  // Prevent bezier curves from being filled
   noFill();
 
-  drawGridPattern();
-  drawCurvePattern();
+  drawGridPattern(valence, arousal);
+  drawCurvePattern(valence, arousal);
 }
 
 function draw() {
@@ -20,7 +24,7 @@ function draw() {
 // Draw
 // ----------
 
-function drawCurvePattern() {
+function drawCurvePattern(valence, arousal) {
   const themeColors = {
     primary: color(random(255), random(255), random(255), 120),
     secondary: color(random(255), random(255), random(255), 255),
@@ -60,7 +64,7 @@ function drawCurve() {
   bezier(p1.x, p1.y, p2.x, p2.y, p3.x, p3.y, p4.x, p4.y);
 }
 
-function drawGridPattern() {
+function drawGridPattern(valence, arousal) {
   const themeColors = {
     primary: color(random(255), random(255), random(255), 120),
     secondary: color(random(255), random(255), random(255), 255),

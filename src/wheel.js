@@ -1,3 +1,6 @@
+const canvasWidth = 320;
+const canvasHeight = canvasWidth;
+
 const originX = canvasWidth / 2;
 const originY = canvasHeight / 2;
 
@@ -5,6 +8,7 @@ const radiusOuter = 150;
 const diameterOuter = 2 * radiusOuter;
 
 const radiusInner = 10;
+const diameterInner = 2 * radiusInner;
 
 function setup() {
   canvas = createCanvas(canvasWidth, canvasHeight);
@@ -13,8 +17,8 @@ function setup() {
   stroke(0);
   strokeWeight(2);
 
-  innerCenterX = canvasWidth / 2;
-  innerCenterY = canvasHeight / 2;
+  innerCenterX = originX + valence;
+  innerCenterY = originY - arousal;
 }
 
 function draw() {
@@ -23,6 +27,7 @@ function draw() {
   // Draw outer wheel
   ellipse(originX, originY, diameterOuter, diameterOuter);
 
+  // Distance from mouse to center of inner marker
   distance = dist(mouseX, mouseY, innerCenterX, innerCenterY);
 
   if (distance < radiusInner) {
@@ -32,7 +37,7 @@ function draw() {
   }
 
   // Draw inner marker
-  ellipse(innerCenterX, innerCenterY, 2 * radiusInner, 2 * radiusInner);
+  ellipse(innerCenterX, innerCenterY, diameterInner, diameterInner);
 }
 
 function mousePressed() {
@@ -53,6 +58,9 @@ function mouseDragged() {
 
     console.log("Valence:", valence);
     console.log("Arousal:", arousal);
+
+    // Prevent default
+    return false;
   }
 }
 

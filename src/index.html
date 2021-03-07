@@ -14,13 +14,12 @@
     <link rel="stylesheet" href="index.css" />
 
     <!-- Libraries -->
-    <script src="../vendor/p5.min.js"></script>
-    <script src="../vendor/p5.dom.min.js"></script>
+    <script src="../node_modules/p5/lib/p5.min.js"></script>
 
     <!-- Application -->
-    <script src="constants.js"></script>
+    <script src="sharedConstants.js"></script>
     <script src="inputValues.js"></script>
-    <script src="index.js"></script>
+    <script src="wheel.js"></script>
   </head>
 
   <body>
@@ -29,7 +28,7 @@
     </header>
     <main>
       <div class="row">
-        <div id="sketch" class="canvasContainer"></div>
+        <div id="sketch" class="sketch"></div>
       </div>
       <div class="row">
         <button class="btn" onclick="onSubmit()">Submit</a>
