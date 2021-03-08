@@ -7,7 +7,6 @@ function setup() {
   canvas = createCanvas(canvasWidth, canvasHeight);
   canvas.parent("sketch");
 
-  // drawGridPattern();
   drawCurvePattern();
   drawShapePattern();
 }
@@ -27,8 +26,8 @@ function drawCurvePattern() {
     tertiary: color(random(255), random(255), random(255)),
   };
 
-  strokeWeight(15);
-  stroke(themeColors.primary);
+  // Parameters
+  const weight = chooseStrokeWeight();
 
   // Shadow configuration
   drawingContext.shadowOffsetX = 5;
@@ -38,6 +37,9 @@ function drawCurvePattern() {
 
   // Draw curve 10 times
   for (let i = 0; i < 10; i++) {
+    stroke(themeColors.primary);
+    strokeWeight(random(weight - 1, weight + 1));
+
     drawRandomCurve();
   }
 }
@@ -52,8 +54,13 @@ function drawShapePattern() {
   // Parameters
   const numberOfShapes = chooseNumberOfShapes();
   const shapeType = chooseShapeType();
+  const shapeSize = chooseShapeSize();
+  const weight = chooseStrokeWeight();
+  // rotation
+  // shouldFill
+  // strokeColor
+  // shadowColor, shadowBlur
 
-  stroke(themeColors.primary);
   drawingContext.shadowOffsetX = 3;
   drawingContext.shadowOffsetY = 3;
   drawingContext.shadowBlur = 5;
@@ -62,18 +69,21 @@ function drawShapePattern() {
   for (let i = 0; i < numberOfShapes; i++) {
     const anchorPoint = getRandomPoint();
 
+    stroke(themeColors.primary);
+    strokeWeight(random(weight - 1, weight + 1));
+
     if (shapeType === "circle") {
-      ellipse(anchorPoint.x, anchorPoint.y, 50, 50);
+      ellipse(anchorPoint.x, anchorPoint.y, shapeSize, shapeSize);
       continue;
     }
 
     if (shapeType === "rounded rect") {
-      rect(anchorPoint.x, anchorPoint.y, 50, 50, 20);
+      rect(anchorPoint.x, anchorPoint.y, shapeSize, shapeSize, 20);
       continue;
     }
 
     if (shapeType === "rect") {
-      rect(anchorPoint.x, anchorPoint.y, 50, 50);
+      rect(anchorPoint.x, anchorPoint.y, shapeSize, shapeSize);
       continue;
     }
 
@@ -81,10 +91,10 @@ function drawShapePattern() {
       triangle(
         anchorPoint.x,
         anchorPoint.y,
-        anchorPoint.x + 4,
+        anchorPoint.x + shapeSize,
         anchorPoint.y,
-        anchorPoint.x + 2,
-        anchorPoint.y + 2
+        anchorPoint.x + shapeSize / 2,
+        anchorPoint.y + shapeSize / 2
       );
       continue;
     }
@@ -108,7 +118,7 @@ function chooseNumberOfShapes() {
 function chooseShapeType() {
   if (arousal < 50) {
     return "circle";
-  } else if (arousal < 80) {
+  } else if (arousal < 70) {
     return "rounded rect";
   } else if (arousal < 80) {
     return "rect";
@@ -117,6 +127,14 @@ function chooseShapeType() {
   } else {
     return "line";
   }
+}
+
+function chooseShapeSize() {
+  return ((100 - arousal) / 3) * 2;
+}
+
+function chooseStrokeWeight() {
+  return 20 - Math.ceil(arousal / 5);
 }
 
 // ----------

@@ -171,19 +171,19 @@ function getClosestPointOnWheel(pointX, pointY) {
 }
 
 function translateToValence(pointX) {
-  return int(((pointX - wheelMarginX) / diameterWheel) * 100 - 50);
+  return int(((pointX - wheelMarginX) / diameterWheel) * 100);
 }
 
 function translateToArousal(pointY) {
-  return int(-(((pointY - wheelMarginY) / diameterWheel) * 100 - 50));
+  return 100 - int(((pointY - wheelMarginY) / diameterWheel) * 100);
 }
 
 function translateToCanvasX(valence) {
-  return wheelMarginX + radiusWheel + (valence / 100) * diameterWheel;
+  return wheelMarginX + (valence / 100) * diameterWheel;
 }
 
 function translateToCanvasY(arousal) {
-  return wheelMarginY + radiusWheel - (arousal / 100) * diameterWheel;
+  return wheelMarginY + diameterWheel - (arousal / 100) * diameterWheel;
 }
 
 // ----------
