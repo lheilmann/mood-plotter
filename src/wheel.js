@@ -14,6 +14,7 @@ const radiusMarker = 15;
 const diameterMarker = 2 * radiusMarker;
 
 let overBox = false;
+let pressed = false;
 let locked = false;
 
 let markerX = translateToCanvasX(valence);
@@ -47,9 +48,7 @@ function draw() {
 }
 
 function mousePressed() {
-  locked = overMarker;
-  xOffset = mouseX - markerX;
-  yOffset = mouseY - markerY;
+  pressed = overMarker;
 }
 
 function mouseDragged() {
@@ -69,6 +68,10 @@ function mouseDragged() {
     // Compute valence and arousal to fit in [-50, 50] interval, update values accordingly
     valence = translateToValence(markerX);
     arousal = translateToArousal(markerY);
+  } else if (overMarker) {
+    locked = true;
+    xOffset = mouseX - markerX;
+    yOffset = mouseY - markerY;
   }
 
   // Prevent default browser behaviour
@@ -77,6 +80,12 @@ function mouseDragged() {
 
 function mouseReleased() {
   locked = false;
+  pressed = false;
+}
+
+function touchEnded() {
+  locked = false;
+  pressed = false;
 }
 
 // ----------
@@ -129,14 +138,17 @@ function drawMarker() {
   strokeWeight(2);
   stroke(255, 0, 0, 180);
 
-  if (locked) {
+  if (locked || pressed) {
     fill(255, 0, 0, 100);
   } else {
     fill(255, 0, 0, 30);
   }
 
+  const radius = locked || pressed ? 2 * radiusMarker : radiusMarker;
+  const diameter = 2 * radius;
+
   // Draw marker circle
-  ellipse(markerX, markerY, diameterMarker, diameterMarker);
+  ellipse(markerX, markerY, diameter, diameter);
 }
 
 // ----------
