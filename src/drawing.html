@@ -15,6 +15,7 @@
 
     <!-- Libraries -->
     <script src="https://cdn.jsdelivr.net/npm/p5@1.2.0/lib/p5.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.3/jspdf.min.js"></script>
 
     <!-- Application -->
     <script src="getValues.js"></script>
@@ -28,9 +29,11 @@
     <main>
       <div class="row">
         <div id="sketch" class="sketch"></div>
+        <img src="" id="mirror" class="mirror" />
       </div>
       <div class="row">
-        <button class="btn" onclick="onBack();">Back</a>
+        <button class="btn" onclick="onBack();">Back</button>
+        <button class="btn" onclick="onDownload();">Download</button>
       </div>
     </main>
   </body>
