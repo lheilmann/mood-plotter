@@ -76,6 +76,7 @@ function drawShapePattern() {
     const weight = getStrokeWeight();
     const primaryColor = getPrimaryColor();
     const secondaryColor = getSecondaryColor();
+    const borderRadius = getBorderRadius();
     // rotation
     // shouldFill
     // shadowSize, shadowBlur
@@ -84,6 +85,7 @@ function drawShapePattern() {
     // Styling
     stroke(primaryColor);
     strokeWeight(weight);
+
     drawingContext.shadowOffsetX = 3;
     drawingContext.shadowOffsetY = 3;
     drawingContext.shadowBlur = 5;
@@ -98,7 +100,7 @@ function drawShapePattern() {
     }
 
     if (shapeType === "rounded rect") {
-      rect(anchorPoint.x, anchorPoint.y, shapeSize, shapeSize, 20);
+      rect(anchorPoint.x, anchorPoint.y, shapeSize, shapeSize, borderRadius);
       continue;
     }
 
@@ -155,14 +157,25 @@ function getShapeType() {
   }
 }
 
+/**
+ * Only applied to "rounded rect" shape type
+ *
+ * Return value in range [0, 10]
+ */
+function getBorderRadius() {
+  return (arousal - 50) / 2 / 4 + ((valence / 10) * 3) / 4;
+}
+
 function getShapeSize() {
-  const baseSize = ((100 - arousal) / 3) * 2;
+  const baseSize = (100 - arousal) / 3 + valence / 3;
   return random(Math.max(baseSize - 1, 1), Math.min(baseSize + 1, 20));
 }
 
 function getStrokeWeight() {
-  const baseWeight = 20 - Math.ceil(arousal / 5);
-  return random(Math.max(baseWeight - 1, 1), Math.min(baseWeight + 1, 20));
+  const baseWeight =
+    ((((100 - arousal) * 3) / 10 + (valence * 5) / 10) / 100) * 15;
+  console.log(baseWeight);
+  return random(Math.max(baseWeight - 1, 1), Math.min(baseWeight + 1, 18));
 }
 
 function getOpacity() {
