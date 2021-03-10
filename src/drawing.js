@@ -1,7 +1,7 @@
 // NOTE: `valence` and `arousal` are available as global variables here.
 
 const canvasWidth = 360;
-const canvasHeight = canvasWidth;
+const canvasHeight = 400;
 
 // IMPORTANT: The order of the moods is crucial for the color generation.
 const moods = [
@@ -174,7 +174,6 @@ function getShapeSize() {
 function getStrokeWeight() {
   const baseWeight =
     ((((100 - arousal) * 3) / 10 + (valence * 5) / 10) / 100) * 15;
-  console.log(baseWeight);
   return random(Math.max(baseWeight - 1, 1), Math.min(baseWeight + 1, 18));
 }
 

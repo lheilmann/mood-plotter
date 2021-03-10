@@ -1,5 +1,5 @@
 const canvasWidth = 360;
-const canvasHeight = canvasWidth;
+const canvasHeight = 400;
 
 const originX = canvasWidth / 2;
 const originY = canvasHeight / 2;
@@ -85,7 +85,7 @@ function drawWheel() {
   noFill();
 
   // Draw axes
-  stroke(150);
+  stroke(180);
   strokeWeight(2);
 
   // Valence axis
@@ -96,13 +96,13 @@ function drawWheel() {
 
   // Draw outer circle
   stroke(0);
-  strokeWeight(2);
+  strokeWeight(4);
   ellipse(originX, originY, diameterWheel, diameterWheel);
 
   // Draw labels
-  stroke(150);
-  strokeWeight(0.8);
-  textSize(14);
+  stroke(180);
+  strokeWeight(1);
+  textSize(15);
   textFont("Roboto");
 
   text("excited", originX + 20, originY - 110);
