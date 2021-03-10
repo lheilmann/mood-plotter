@@ -13,9 +13,7 @@ const wheelMarginY = (canvasHeight - diameterWheel) / 2;
 const radiusMarker = 15;
 const diameterMarker = 2 * radiusMarker;
 
-let overBox = false;
 let pressed = false;
-let locked = false;
 
 let markerX = translateToCanvasX(valence);
 let markerY = translateToCanvasY(arousal);
@@ -39,32 +37,26 @@ function draw() {
 }
 
 function mousePressed() {
-  // Distance from mouse to center of marker
-  distance = dist(mouseX, mouseY, markerX, markerY);
-  acceptedDistance = 2 * radiusMarker;
+  if (isInsideWheel(mouseX, mouseY)) {
+    pressed = true;
 
-  if (distance < acceptedDistance) {
-    overMarker = true;
-  } else {
-    overMarker = false;
+    markerX = mouseX;
+    markerY = mouseY;
+
+    // Compute valence and arousal to fit in [-50, 50] interval, update values accordingly
+    valence = translateToValence(markerX);
+    arousal = translateToArousal(markerY);
+    angle = getAngleInDegrees(markerX, markerY);
   }
-
-  locked = overMarker;
-
-  xOffset = mouseX - markerX;
-  yOffset = mouseY - markerY;
 }
 
 function mouseDragged() {
-  if (locked) {
-    const newMarkerX = mouseX - xOffset;
-    const newMarkerY = mouseY - yOffset;
-
-    if (isInsideWheel(newMarkerX, newMarkerY)) {
-      markerX = newMarkerX;
-      markerY = newMarkerY;
+  if (pressed) {
+    if (isInsideWheel(mouseX, mouseY)) {
+      markerX = mouseX;
+      markerY = mouseY;
     } else {
-      const closestPoint = getClosestPointOnWheel(newMarkerX, newMarkerY);
+      const closestPoint = getClosestPointOnWheel(mouseX, mouseY);
       markerX = closestPoint.x;
       markerY = closestPoint.y;
     }
@@ -80,7 +72,7 @@ function mouseDragged() {
 }
 
 function mouseReleased() {
-  locked = false;
+  pressed = false;
 }
 
 // ----------
@@ -133,13 +125,13 @@ function drawMarker() {
   strokeWeight(2);
   stroke(152, 37, 251, 200);
 
-  if (locked || pressed) {
+  if (pressed) {
     fill(152, 37, 251, 100);
   } else {
     fill(152, 37, 251, 30);
   }
 
-  const radius = locked || pressed ? 3 * radiusMarker : radiusMarker;
+  const radius = pressed ? 3 * radiusMarker : radiusMarker;
   const diameter = 2 * radius;
 
   // Draw marker circle
