@@ -36,19 +36,23 @@ function draw() {
 
   // Draw dynamic (inner) marker
   drawMarker();
+}
 
+function mousePressed() {
   // Distance from mouse to center of marker
   distance = dist(mouseX, mouseY, markerX, markerY);
+  acceptedDistance = 2 * radiusMarker;
 
-  if (distance < radiusMarker) {
+  if (distance < acceptedDistance) {
     overMarker = true;
   } else {
     overMarker = false;
   }
-}
 
-function mousePressed() {
-  pressed = overMarker;
+  locked = overMarker;
+
+  xOffset = mouseX - markerX;
+  yOffset = mouseY - markerY;
 }
 
 function mouseDragged() {
@@ -56,7 +60,7 @@ function mouseDragged() {
     const newMarkerX = mouseX - xOffset;
     const newMarkerY = mouseY - yOffset;
 
-    if (isPointInWheel(newMarkerX, newMarkerY)) {
+    if (isInsideWheel(newMarkerX, newMarkerY)) {
       markerX = newMarkerX;
       markerY = newMarkerY;
     } else {
@@ -68,10 +72,7 @@ function mouseDragged() {
     // Compute valence and arousal to fit in [-50, 50] interval, update values accordingly
     valence = translateToValence(markerX);
     arousal = translateToArousal(markerY);
-  } else if (overMarker) {
-    locked = true;
-    xOffset = mouseX - markerX;
-    yOffset = mouseY - markerY;
+    angle = getAngleInDegrees(markerX, markerY);
   }
 
   // Prevent default browser behaviour
@@ -80,12 +81,6 @@ function mouseDragged() {
 
 function mouseReleased() {
   locked = false;
-  pressed = false;
-}
-
-function touchEnded() {
-  locked = false;
-  pressed = false;
 }
 
 // ----------
@@ -114,37 +109,37 @@ function drawWheel() {
 
   // Draw labels
   stroke(150);
-  strokeWeight(1);
-  textSize(16);
+  strokeWeight(0.8);
+  textSize(14);
   textFont("Roboto");
 
-  text("excited", originX + 20, originY - 100);
-  text("delighted", originX + 60, originY - 60);
+  text("excited", originX + 20, originY - 110);
+  text("delighted", originX + 60, originY - 70);
   text("happy", originX + 90, originY - 20);
-  text("content", originX + 80, originY + 40);
-  text("relaxed", originX + 50, originY + 80);
-  text("calm", originX + 20, originY + 120);
-  text("tired", originX - 50, originY + 120);
-  text("bored", originX - 90, originY + 80);
-  text("depressed", originX - 120, originY + 40);
-  text("frustrated", originX - 120, originY - 20);
-  text("angry", originX - 100, originY - 60);
-  text("tense", originX - 60, originY - 100);
+  text("content", originX + 80, originY + 30);
+  text("relaxed", originX + 60, originY + 80);
+  text("calm", originX + 30, originY + 120);
+  text("tired", originX - 60, originY + 120);
+  text("bored", originX - 100, originY + 80);
+  text("depressed", originX - 130, originY + 30);
+  text("frustrated", originX - 130, originY - 20);
+  text("angry", originX - 110, originY - 70);
+  text("tense", originX - 60, originY - 110);
 }
 
 function drawMarker() {
   // Style
   smooth();
   strokeWeight(2);
-  stroke(255, 0, 0, 180);
+  stroke(152, 37, 251, 200);
 
   if (locked || pressed) {
-    fill(255, 0, 0, 100);
+    fill(152, 37, 251, 100);
   } else {
-    fill(255, 0, 0, 30);
+    fill(152, 37, 251, 30);
   }
 
-  const radius = locked || pressed ? 2 * radiusMarker : radiusMarker;
+  const radius = locked || pressed ? 3 * radiusMarker : radiusMarker;
   const diameter = 2 * radius;
 
   // Draw marker circle
@@ -155,39 +150,33 @@ function drawMarker() {
 // Utils
 // ----------
 
-function isPointInWheel(pointX, pointY) {
+function isInsideWheel(x, y) {
   return (
-    Math.pow(pointX - originX, 2) + Math.pow(pointY - originY, 2) <
+    Math.pow(x - originX, 2) + Math.pow(y - originY, 2) <=
     Math.pow(radiusWheel, 2)
   );
 }
 
-function getClosestPointOnWheel(pointX, pointY) {
-  if (isPointInWheel(pointX, pointY)) {
+function getClosestPointOnWheel(x, y) {
+  if (isInsideWheel(x, y)) {
     return {
-      x: pointX,
-      y: pointY,
+      x: x,
+      y: y,
     };
   }
 
   return {
-    x:
-      originX +
-      (radiusWheel * (pointX - originX)) /
-        dist(pointX, pointY, originX, originY),
-    y:
-      originY +
-      (radiusWheel * (pointY - originY)) /
-        dist(pointX, pointY, originX, originY),
+    x: originX + (radiusWheel * (x - originX)) / dist(x, y, originX, originY),
+    y: originY + (radiusWheel * (y - originY)) / dist(x, y, originX, originY),
   };
 }
 
-function translateToValence(pointX) {
-  return int(((pointX - wheelMarginX) / diameterWheel) * 100);
+function translateToValence(x) {
+  return int(((x - wheelMarginX) / diameterWheel) * 100);
 }
 
-function translateToArousal(pointY) {
-  return 100 - int(((pointY - wheelMarginY) / diameterWheel) * 100);
+function translateToArousal(y) {
+  return 100 - int(((y - wheelMarginY) / diameterWheel) * 100);
 }
 
 function translateToCanvasX(valence) {
@@ -196,6 +185,17 @@ function translateToCanvasX(valence) {
 
 function translateToCanvasY(arousal) {
   return wheelMarginY + diameterWheel - (arousal / 100) * diameterWheel;
+}
+
+function getAngleInDegrees(x, y) {
+  x = x - originX;
+  y = y - originY;
+
+  if (x < 0) {
+    return 270 - (Math.atan(y / -x) * 180) / Math.PI;
+  }
+
+  return 90 + (Math.atan(y / x) * 180) / Math.PI;
 }
 
 // ----------
